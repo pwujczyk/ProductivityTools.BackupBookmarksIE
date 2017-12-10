@@ -1,6 +1,5 @@
 
 function Backup-BookmarksIE {
-
 	[cmdletbinding()]
 	param ([string]$Destination, [switch]$ToDateDirectory, [string]$DateNamePrefix, [string]$DateNameSuffix)
 	
@@ -12,7 +11,6 @@ function Backup-BookmarksIE {
 
 	$shellFolders=Get-ItemProperty 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders'
 	$favoritesPath=$shellFolders.Favorites
-	$favoritesPath=Join-Path $favoritesPath "\*.*"
 
 	Write-Verbose "Favorites repository: $favoritesPath"
 	$sourceFileCount=(Get-ChildItem -Path $favoritesPath -Recurse).Length
@@ -26,10 +24,11 @@ function Backup-BookmarksIE {
 	}
 
 	Write-Verbose "There is $sourceFileCount in the Favorites (source) directory"
-	Copy-Item -Recurse -Force -Path $favoritesPath -Destination $destinationDirectory #-Verbose:$VerbosePreference
+	#New-Item -Path $destinationDirectory -Force -ItemType Directory
 	
+	Copy-ItemDirectoryRepeatable -Recurse -Force -LiteralPath $favoritesPath -Destination $destinationDirectory #-Verbose:$VerbosePreference 
 	$destFileCount=(Get-ChildItem -Path $destinationDirectory -Recurse).Length
 	Write-Verbose "There is $destFileCount in the Destination (dest) directory"
 }
 
-Export-ModuleMember Backup-BookmarksIE 
+Export-ModuleMember Backup-BookmarksIE
