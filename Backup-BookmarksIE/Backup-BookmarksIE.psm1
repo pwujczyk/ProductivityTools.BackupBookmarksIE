@@ -1,3 +1,9 @@
+function GetFavoritesPath()
+{
+	$shellFolders=Get-ItemProperty 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders'
+	$favoritesPath=$shellFolders.Favorites
+	return $favoritesPath
+}
 
 function Backup-BookmarksIE {
 	[cmdletbinding()]
@@ -9,8 +15,7 @@ function Backup-BookmarksIE {
 	}
 	Write-Verbose "Destination directory: $Destination"
 
-	$shellFolders=Get-ItemProperty 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders'
-	$favoritesPath=$shellFolders.Favorites
+	$favoritesPath=GetFavoritesPath
 
 	Write-Verbose "Favorites repository: $favoritesPath"
 	$sourceFileCount=(Get-ChildItem -Path $favoritesPath -Recurse).Length
@@ -30,5 +35,29 @@ function Backup-BookmarksIE {
 	$destFileCount=(Get-ChildItem -Path $destinationDirectory -Recurse).Length
 	Write-Verbose "There is $destFileCount in the Destination (dest) directory"
 }
+
+function Restore-BookmarksIE
+{
+	[cmdletbinding()]
+	param ([string]$SourceDirectory, [switch]$FromLastDateDirectory, [string]$DateNamePrefix, [string]$DateNameSuffix)
+
+	if($FromLastDateDirectory.IsPresent)
+	{
+		$lastDirectory=Get-ChildItem -Path "$SourceDirectory\$DateNamePrefix*$DateNameSuffix" |Select-Object -Last 1
+		$SourceDirectory=$lastDirectory
+	}
+
+	$sourceFileCount=(Get-ChildItem -Path $SourceDirectory -Recurse).Length
+	Write-Verbose "There is $sourceFileCount in the Source directory"
+
+	$favoritesPath=GetFavoritesPath
+	#$favoritesPath=$favoritesPath+'2'
+
+	Copy-ItemDirectoryRepeatable -Recurse -Force -LiteralPath $SourceDirectory -Destination $favoritesPath #-Verbose:$VerbosePreference 
+	$destFileCount=(Get-ChildItem -Path $favoritesPath -Recurse).Length
+	Write-Verbose "There is $destFileCount in the Favorites (dest) directory"
+}
+
+Export-ModuleMember Restore-BookmarksIE
 
 Export-ModuleMember Backup-BookmarksIE
