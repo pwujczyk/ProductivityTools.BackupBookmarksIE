@@ -29,8 +29,8 @@
   </PropertyGroup>
   <ItemGroup />
   <ItemGroup>
-    <Compile Include="ProductivityTools.PSBackupBookmarksIE.psd1" />
-    <Compile Include="ProductivityTools.PSBackupBookmarksIE.psm1" />
+    <Compile Include="ProductivityTools.BackupBookmarksIE.psd1" />
+    <Compile Include="ProductivityTools.BackupBookmarksIE.psm1" />
     <Compile Include="Runner.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
