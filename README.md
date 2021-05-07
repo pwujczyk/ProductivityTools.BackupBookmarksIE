@@ -1,9 +1,44 @@
-[![GitHub](http://cdn.productivitytools.tech/Github40px.png)](https://github.com/pwujczyk/ProductivityTools.PSBackupBookmarksIE)
-[![PowershellGallery](http://cdn.productivitytools.tech/Powershell40px.png)](https://www.powershellgallery.com/packages/ProductivityTools.PSBackupBookmarksIE/)
-[![ProductivityTools](http://cdn.productivitytools.tech/Blog40px.png)](http://www.productivitytools.tech/backup-bookmarksie/)
- 
- 
-# ProductivityTools.PSBackupBookmarksIE
-Gets the Internet Explore bookmark directory from registry and copies the content to given path. To check correctness it calculates amount of items in the source and in the destination directory.
+<!--Category:PowerShell--> 
+ <p align="right">
+    <a href="https://www.powershellgallery.com/packages/ProductivityTools.ConvertDocuments/"><img src="Images/Header/Powershell_border_40px.png" /></a>
+    <a href="http://productivitytools.tech/convert-documents/"><img src="Images/Header/ProductivityTools_green_40px_2.png" /><a> 
+    <a href="https://github.com/pwujczyk/ProductivityTools.ConvertDocuments/"><img src="Images/Header/Github_border_40px.png" /></a>
+</p>
+<p align="center">
+    <a href="http://http://productivitytools.tech/">
+        <img src="Images/Header/LogoTitle_green_500px.png" />
+    </a>
+</p>
 
-Module allows to create in the destination directory, folder with the date name in the format yyyy.MM.dd.hh.mm.ss. For example 2017.12.02.08.56.16. (Module depend on Get-DateName)
+# Backup Bookmarks IE
+
+Copy all Internet Explorer bookmarks to the given path.
+
+<!--more-->
+
+Module reads the registry to locate the favorites path and copy all the contents to the given localization. 
+
+![Backup](Images/Backup.png)
+
+Registry key with Favorites property.
+
+![RegistryKey](Images/RegistryKey.png)
+
+
+```PowerShell
+Backup-BookmarksIE -Destination D:\Trash\ 
+```
+
+Module allows to use couple of the switches which helps organize backups
+- Destination - path where backup should be placed
+- ToDateDirectory - if used directory with the date name will be created. Date will have format yyyy.MM.dd.hh.mm.ss. For example 2017.12.02.08.56.16. 
+- DateNamePrefix - it allows to add some words before date (checkout example)
+- DateNameSuffix - as above
+- ToPersonalOneDrive - it will backup favorites to personal one drive. You don't need to provide what is the real OneDrive location
+- ToBusinessOneDrive - as above
+
+```PowerShell
+Backup-BookmarksIE -Destination D:\Trash\ -ToDateDirectory -DateNamePrefix ie
+```
+
+![ResultOfBackup](Images/ResultOfBackup.png)

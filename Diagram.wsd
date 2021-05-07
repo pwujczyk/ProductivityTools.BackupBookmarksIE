@@ -1,0 +1,9 @@
+@startuml
+title "Backup Internet Explorer Bookmarks"
+
+:get registry value;
+:HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders;
+:get Favorites key;
+:copy contents to the given directory;
+
+@enduml
